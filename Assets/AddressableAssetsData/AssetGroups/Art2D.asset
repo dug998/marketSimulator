@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Art2D
+  m_EditorClassIdentifier: 
+  m_GroupName: Art2D
+  m_Data:
+    m_SerializedData: []
+  m_GUID: ae5a1cc19a0960c46809354ba7c3c9a4
+  m_SerializeEntries:
+  - m_GUID: 19443a6355356ad41bcefef90c4c24af
+    m_Address: Art2D
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Art2D
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: f005a010dbeb5d14aae3127ecae4ee71, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 9b94c98c673f7e14a84d94137b44b104, type: 2}
+    - {fileID: 11400000, guid: 3efead5c72ba0be4181bc77988f5fcda, type: 2}

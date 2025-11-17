@@ -11,6 +11,7 @@ public static class EventID
         PlayMove,
         PlayerDie,
         PlayerLookDelta,
+        PlayerInteractor
     }
 
 
