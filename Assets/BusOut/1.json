@@ -1,0 +1,104 @@
+{
+  "Level": 0,
+  "ParkingPlotData": {
+    "Cars": [
+      {
+        "Color": 10,
+        "Size": 10,
+        "Direction": 2,
+        "Position": {
+          "x": 0.111412928,
+          "y": -2.68450427,
+          "normalized": {
+            "x": 0.0414665379,
+            "y": -0.9991399,
+            "magnitude": 1.0,
+            "sqrMagnitude": 1.0
+          },
+          "magnitude": 2.68681526,
+          "sqrMagnitude": 7.218976
+        }
+      },
+      {
+        "Color": 1,
+        "Size": 4,
+        "Direction": 4,
+        "Position": {
+          "x": 2.360435,
+          "y": 0.3520119,
+          "normalized": {
+            "x": 0.9890622,
+            "y": 0.147498935,
+            "magnitude": 1.0,
+            "sqrMagnitude": 0.99999994
+          },
+          "magnitude": 2.38653851,
+          "sqrMagnitude": 5.6955657
+        }
+      },
+      {
+        "Color": 0,
+        "Size": 6,
+        "Direction": -1,
+        "Position": {
+          "x": -0.3891425,
+          "y": 0.0404867828,
+          "normalized": {
+            "x": -0.9946313,
+            "y": 0.103482455,
+            "magnitude": 1.0,
+            "sqrMagnitude": 1.0
+          },
+          "magnitude": 0.391242981,
+          "sqrMagnitude": 0.153071076
+        }
+      },
+      {
+        "Color": 10,
+        "Size": 6,
+        "Direction": -3,
+        "Position": {
+          "x": -1.96390331,
+          "y": 2.29198837,
+          "normalized": {
+            "x": -0.6506657,
+            "y": 0.759364367,
+            "magnitude": 1.0,
+            "sqrMagnitude": 1.00000012
+          },
+          "magnitude": 3.01829863,
+          "sqrMagnitude": 9.1101265
+        }
+      }
+    ]
+  },
+  "QueuePassengerData": {
+    "QueuePassenger": {
+      "List": [
+        {
+          "color": 0,
+          "num": 4
+        },
+        {
+          "color": 1,
+          "num": 6
+        },
+        {
+          "color": 4,
+          "num": 6
+        },
+        {
+          "color": 9,
+          "num": 10
+        },
+        {
+          "color": 6,
+          "num": 4
+        }
+      ],
+      "IsEmpty": false,
+      "Count": 5
+    }
+  },
+  "ScaleFactor": 0.6499999
+}

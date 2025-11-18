@@ -1,0 +1,206 @@
+{
+  "Level": 0,
+  "ParkingPlotData": {
+    "Cars": [
+      {
+        "Color": 6,
+        "Size": 4,
+        "Direction": 4,
+        "Position": {
+          "x": -1.203694,
+          "y": -2.126383,
+          "normalized": {
+            "x": -0.492623329,
+            "y": -0.8702427,
+            "normalized": {
+              "x": -0.49262327,
+              "y": -0.8702426,
+              "normalized": {
+                "x": -0.4926233,
+                "y": -0.870242655,
+                "magnitude": 1.0,
+                "sqrMagnitude": 1.0
+              },
+              "magnitude": 0.99999994,
+              "sqrMagnitude": 0.9999999
+            },
+            "magnitude": 1.00000012,
+            "sqrMagnitude": 1.00000012
+          },
+          "magnitude": 2.44343686,
+          "sqrMagnitude": 5.970384
+        }
+      },
+      {
+        "Color": 8,
+        "Size": 10,
+        "Direction": -3,
+        "Position": {
+          "x": -2.767097,
+          "y": 2.58229923,
+          "normalized": {
+            "x": -0.731098056,
+            "y": 0.6822724,
+            "magnitude": 1.0,
+            "sqrMagnitude": 0.99999994
+          },
+          "magnitude": 3.78485084,
+          "sqrMagnitude": 14.3250952
+        }
+      },
+      {
+        "Color": 9,
+        "Size": 6,
+        "Direction": -3,
+        "Position": {
+          "x": -1.18090594,
+          "y": 1.13802564,
+          "normalized": {
+            "x": -0.7200591,
+            "y": 0.6939128,
+            "magnitude": 1.0,
+            "sqrMagnitude": 1.00000012
+          },
+          "magnitude": 1.6400125,
+          "sqrMagnitude": 2.68964124
+        }
+      },
+      {
+        "Color": 0,
+        "Size": 10,
+        "Direction": 5,
+        "Position": {
+          "x": 0.6110017,
+          "y": -1.44661617,
+          "normalized": {
+            "x": 0.389084548,
+            "y": -0.921202064,
+            "magnitude": 1.0,
+            "sqrMagnitude": 1.0
+          },
+          "magnitude": 1.57035708,
+          "sqrMagnitude": 2.4660213
+        }
+      },
+      {
+        "Color": 6,
+        "Size": 4,
+        "Direction": -2,
+        "Position": {
+          "x": 2.90193176,
+          "y": -2.09625363,
+          "normalized": {
+            "x": 0.8106243,
+            "y": -0.5855665,
+            "normalized": {
+              "x": 0.810624361,
+              "y": -0.5855666,
+              "magnitude": 1.0,
+              "sqrMagnitude": 1.00000012
+            },
+            "magnitude": 0.99999994,
+            "sqrMagnitude": 0.9999999
+          },
+          "magnitude": 3.57987261,
+          "sqrMagnitude": 12.8154869
+        }
+      },
+      {
+        "Color": 8,
+        "Size": 6,
+        "Direction": 3,
+        "Position": {
+          "x": 2.6556406,
+          "y": 1.00466454,
+          "normalized": {
+            "x": 0.9353063,
+            "y": 0.35383895,
+            "normalized": {
+              "x": 0.9353064,
+              "y": 0.35383898,
+              "magnitude": 1.0,
+              "sqrMagnitude": 1.0
+            },
+            "magnitude": 0.99999994,
+            "sqrMagnitude": 0.9999999
+          },
+          "magnitude": 2.839327,
+          "sqrMagnitude": 8.061778
+        }
+      }
+    ]
+  },
+  "QueuePassengerData": {
+    "QueuePassenger": {
+      "List": [
+        {
+          "color": 8,
+          "num": 2
+        },
+        {
+          "color": 9,
+          "num": 2
+        },
+        {
+          "color": 8,
+          "num": 2
+        },
+        {
+          "color": 9,
+          "num": 2
+        },
+        {
+          "color": 8,
+          "num": 2
+        },
+        {
+          "color": 9,
+          "num": 2
+        },
+        {
+          "color": 8,
+          "num": 2
+        },
+        {
+          "color": 0,
+          "num": 2
+        },
+        {
+          "color": 8,
+          "num": 4
+        },
+        {
+          "color": 0,
+          "num": 2
+        },
+        {
+          "color": 8,
+          "num": 4
+        },
+        {
+          "color": 0,
+          "num": 2
+        },
+        {
+          "color": 6,
+          "num": 4
+        },
+        {
+          "color": 0,
+          "num": 2
+        },
+        {
+          "color": 6,
+          "num": 4
+        },
+        {
+          "color": 0,
+          "num": 2
+        }
+      ],
+      "IsEmpty": false,
+      "Count": 16
+    }
+  },
+  "ScaleFactor": 0.7
+}
