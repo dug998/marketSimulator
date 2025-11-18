@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-    CarController currentCarController;
+   public CarController currentCarController;
 
     public void Init()
     {
@@ -26,27 +26,7 @@ public class Slot : MonoBehaviour
     }
     public void READY()
     {
-        bool add = true;
-        while (add)
-        {
-            var passenger = QueuePassengerCtrl.Instance.GetFrontPassenger();
-            if (passenger != null && CanPassengerGo(passenger))
-            {
-                add = true;
-                currentCarController.AddPassenger();
-                QueuePassengerCtrl.Instance.MoveToCar(passenger, currentCarController);
-                if (currentCarController.IsFull())
-                {
-                    currentCarController.Leave();
-                    currentCarController = null;
-                }
-            }
-            else
-            {
-                add = false;
-            }
-        }
-
+        EventGame.Game.OnSlotUpdate.Invoke();
     }
     public bool CanPassengerGo(Passenger passenger)
     {

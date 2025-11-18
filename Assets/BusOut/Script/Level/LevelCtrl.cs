@@ -24,6 +24,8 @@ public class LevelCtrl : MonoSingleton<LevelCtrl>
     private void OnEnable()
     {
         EventGame.Car.OnSelectCar += OnSelectCar;
+        EventGame.Game.OnSlotUpdate += OnSlotUpdate;
+        EventGame.Game.OnQueuePassenger += OnQueuePassenger;
     }
     private void OnDisable()
     {
@@ -38,8 +40,64 @@ public class LevelCtrl : MonoSingleton<LevelCtrl>
         if (car.State == CarState.PARKING && SlotCtrl.Instance.CheckEmptySlot())
         {
             var target = SlotCtrl.Instance.GetFirstEmptySlot();
-            car.SetMove(target);
             target.SetCar(car);
+            car.SetMove(target);
+        }
+    }
+    public void OnSlotUpdate()
+    {
+        var slots = SlotCtrl.Instance.slots;
+        foreach (var slot in slots)
+        {
+            if (slot.CheckEmpty())
+            {
+                continue;
+            }
+            if (slot.currentCarController.IsFull())
+            {
+                slot.currentCarController.Leave();
+                slot.SetCar(null);
+                continue;
+            }
+            var passenger = QueuePassengerCtrl.Instance.GetFrontPassenger();
+            if (passenger != null && slot.CanPassengerGo(passenger))
+            {
+                slot.currentCarController.AddPassenger();
+                QueuePassengerCtrl.Instance.MoveToCar(passenger, slot.currentCarController);
+                if (slot.currentCarController.IsFull())
+                {
+                    slot.currentCarController.Leave();
+                    slot.SetCar(null);
+                }
+            }
+        }
+    }
+    public void OnQueuePassenger()
+    {
+        var slots = SlotCtrl.Instance.slots;
+        foreach (var slot in slots)
+        {
+            if (slot.CheckEmpty())
+            {
+                continue;
+            }
+            if (slot.currentCarController.IsFull())
+            {
+                slot.currentCarController.Leave();
+                slot.SetCar(null);
+                continue;
+            }
+            var passenger = QueuePassengerCtrl.Instance.GetFrontPassenger();
+            if (passenger != null && slot.CanPassengerGo(passenger))
+            {
+                slot.currentCarController.AddPassenger();
+                QueuePassengerCtrl.Instance.MoveToCar(passenger, slot.currentCarController);
+                if (slot.currentCarController.IsFull())
+                {
+                    slot.currentCarController.Leave();
+                    slot.SetCar(null);
+                }
+            }
         }
     }
 }

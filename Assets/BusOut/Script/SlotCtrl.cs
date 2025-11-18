@@ -12,8 +12,14 @@ public class SlotCtrl : MonoSingleton<SlotCtrl>
     }
     public bool CheckEmptySlot()
     {
-
-        return true;
+        foreach (var slot in slots)
+        {
+            if (slot.CheckEmpty())
+            {
+                return true;
+            }
+        }
+        return false;
     }
     public Slot GetFirstEmptySlot()
     {
@@ -27,4 +33,6 @@ public class SlotCtrl : MonoSingleton<SlotCtrl>
         Debug.LogWarning("SlotManager: don't have EmptySlot");
         return null;
     }
+  
+
 }

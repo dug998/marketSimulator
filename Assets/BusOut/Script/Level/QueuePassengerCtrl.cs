@@ -14,7 +14,7 @@ public class QueuePassengerCtrl : MonoSingleton<QueuePassengerCtrl>
         {
             for (int i = 0; i < data.num; i++)
             {
-                var obj = Instantiate(PassengerPrefab,transform);
+                var obj = Instantiate(PassengerPrefab, transform);
 
                 obj.transform.localPosition = Util.GetPassengerPosition(index);
                 obj.GetComponent<Passenger>().Init(data.color);
@@ -35,15 +35,24 @@ public class QueuePassengerCtrl : MonoSingleton<QueuePassengerCtrl>
     {
         currentQueuePassenger.Dequeue();
         passenger.MoveToCar(car);
-        Invoke("AfterMoveToCar", Config.TIME_PASSENGER_TO_CAR);
+      //  Invoke(nameof(AfterMoveToCar), Config.TIME_PASSENGER_TO_CAR);
+        AfterMoveToCar();
     }
     private void AfterMoveToCar()
     {
-       // currentQueuePassenger.Dequeue();
+        // currentQueuePassenger.Dequeue();
+        int index = 0;
         foreach (var controller in currentQueuePassenger)
         {
             controller.Run();
+            controller.transform.localPosition = Util.GetPassengerPosition(index);
+            index++;
         }
+        EventGame.Game.OnQueuePassenger.Invoke();
         return;
+    }
+    private void Display()
+    {
+
     }
 }

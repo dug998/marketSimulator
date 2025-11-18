@@ -10,7 +10,7 @@ public static class Config
     public static int WIDTH_QUEUE_PASSENGER = 12;
     public static float DISTANCE_PASSENGER = 0.6f;
 
-    public static float VEC_CAR_MOVE = 2f;
+    public static float VEC_CAR_MOVE = 10f;
     public static float TIME_PASSENGER_TO_CAR = 0.2f;
 
     public static string Car = "Car";

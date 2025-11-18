@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Sirenix.Reflection.Editor;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -66,10 +67,13 @@ public class CarController : MonoBehaviour
         {
             _state = CarState.MOVE_TO_SLOT;
 
-            Vector3[] pathPositions = new Vector3[3];
-            pathPositions[0] = transform.position;
-            pathPositions[1] = other.ClosestPoint(transform.position);
-            pathPositions[2] = _targetSlot.transform.position;
+            Vector3[] pathPositions = GetArcPath(transform.position, _targetSlot.transform.position);
+            //pathPositions[0] = transform.position;
+            //pathPositions[1] = other.ClosestPoint(transform.position);
+            //pathPositions[2] = _targetSlot.transform.position;
+
+
+
             transform.DOPath(pathPositions, Config.VEC_CAR_MOVE, PathType.CatmullRom).SetSpeedBased().OnComplete(() =>
             {
                 _carDirection = CarDirection.parking;
@@ -104,6 +108,23 @@ public class CarController : MonoBehaviour
         }
 
 
+    }
+
+    private Vector3[] GetArcPath(Vector3 start, Vector3 end)
+    {
+        float minX = -4f;  // vùng cấm bên trái
+        float maxX = 4f;
+        Vector3 midPoint = (start + end) / 2f;
+
+        if (midPoint.x > minX && midPoint.x < maxX)
+        {
+            // chọn đẩy ra bên trái hoặc bên phải
+            if (midPoint.x - minX < maxX - midPoint.x)
+                midPoint.x = minX - 0.5f; // lùi ra ngoài trái
+            else
+                midPoint.x = maxX + 0.5f; // ra ngoài phải
+        }
+        return new Vector3[] { start, midPoint, end };
     }
     public void Crash()
     {
