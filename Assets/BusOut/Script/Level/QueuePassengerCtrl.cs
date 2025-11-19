@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Sirenix.Utilities;
 using UnityEngine;
 
 public class QueuePassengerCtrl : MonoSingleton<QueuePassengerCtrl>
 {
     public GameObject PassengerPrefab;
+    public bool IsUpdatePassenger;
+
     private Queue<Passenger> currentQueuePassenger = new Queue<Passenger>();
     public void Init(QueuePassengerData queuePassengerData)
     {
@@ -33,26 +36,39 @@ public class QueuePassengerCtrl : MonoSingleton<QueuePassengerCtrl>
     }
     public void MoveToCar(Passenger passenger, CarController car)
     {
-        currentQueuePassenger.Dequeue();
         passenger.MoveToCar(car);
-      //  Invoke(nameof(AfterMoveToCar), Config.TIME_PASSENGER_TO_CAR);
-        AfterMoveToCar();
+        currentQueuePassenger.Dequeue();
+        if (currentQueuePassenger.Count == 0)
+        {
+            Debug.Log("win game");
+
+        }
+
+        UpdatePassenger();
     }
-    private void AfterMoveToCar()
+    private void UpdatePassenger()
     {
+        IsUpdatePassenger = true;
+        EventGame.Game.OnUpdateNumberPassenger.Invoke(currentQueuePassenger.Count);
         // currentQueuePassenger.Dequeue();
         int index = 0;
+        Sequence sequence = DOTween.Sequence();
         foreach (var controller in currentQueuePassenger)
         {
             controller.Run();
-            controller.transform.localPosition = Util.GetPassengerPosition(index);
+            sequence.Join(controller.transform.DOLocalMove(Util.GetPassengerPosition(index), 0.25f));
             index++;
         }
-        EventGame.Game.OnQueuePassenger.Invoke();
-        return;
-    }
-    private void Display()
-    {
+        sequence.OnComplete(() =>
+        {
+            currentQueuePassenger.ForEach(x => x.Idle());
+            IsUpdatePassenger = false;
+            EventGame.Game.OnQueuePassenger.Invoke();
 
+        });
+    }
+    public bool IsReady()
+    {
+        return !IsUpdatePassenger;
     }
 }

@@ -1,11 +1,10 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using Sirenix.Reflection.Editor;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.GraphicsBuffer;
+using Sequence = DG.Tweening.Sequence;
 
 public class CarController : MonoBehaviour
 {
@@ -13,14 +12,16 @@ public class CarController : MonoBehaviour
     public CarDirection _carDirection;
     public int _idColor;
 
-
-
+    public CarSeat _seat;
     private CarState _state = CarState.PARKING;
     private Vector2 oldPosition;
     private Slot _targetSlot;
     int currentPassengerNum = 0;
     CarData _data;
     [SerializeField] private MeshRenderer _meshRenderer;
+    [SerializeField] private MeshRenderer _meshRendererSlot;
+
+    private List<Passenger> passengerToCards = new List<Passenger>();
     public void Init(CarData data)
     {
         _data = data;
@@ -29,6 +30,11 @@ public class CarController : MonoBehaviour
         transform.localPosition = new Vector3(data.Position.x, 0, data.Position.y);
         transform.localRotation = Quaternion.Euler(0, DirectionHelper.GetDirectionAngle(_carDirection), 0);
         _meshRenderer.material = LevelSetup.Instance.GetMaterialByIdColor(data.Color);
+        _meshRendererSlot.material = LevelSetup.Instance.GetMaterialByIdColor(data.Color);
+
+        _meshRendererSlot.gameObject.SetActive(false);
+        _meshRenderer.gameObject.SetActive(true);
+        passengerToCards.Clear();
 
     }
     private void OnMouseDown()
@@ -66,12 +72,8 @@ public class CarController : MonoBehaviour
         if (other.CompareTag(Const.Wall))
         {
             _state = CarState.MOVE_TO_SLOT;
-
-            Vector3[] pathPositions = GetArcPath(transform.position, _targetSlot.transform.position);
-            //pathPositions[0] = transform.position;
-            //pathPositions[1] = other.ClosestPoint(transform.position);
-            //pathPositions[2] = _targetSlot.transform.position;
-
+            var collisionPoint = transform.position + DirectionHelper.GetDirectionVector(_carDirection);
+            Vector3[] pathPositions = ParkingPlotCtrl.Instance.GenerateParkingExitPath(DirectionHelper.GetDirectionVector(_carDirection), other.gameObject, collisionPoint, _targetSlot.transform.position).ToArray();
 
 
             transform.DOPath(pathPositions, Config.VEC_CAR_MOVE, PathType.CatmullRom).SetSpeedBased().OnComplete(() =>
@@ -79,6 +81,9 @@ public class CarController : MonoBehaviour
                 _carDirection = CarDirection.parking;
                 transform.localRotation = Quaternion.Euler(0, DirectionHelper.GetDirectionAngle(_carDirection), 0);
                 _targetSlot.READY();
+
+                _meshRendererSlot.gameObject.SetActive(true);
+                _meshRenderer.gameObject.SetActive(false);
             }).SetLookAt(0.01f);
 
         }
@@ -98,6 +103,9 @@ public class CarController : MonoBehaviour
             }
             _state = CarState.MOVE_BACK;
 
+            _targetSlot.SetStateDefault();
+            _targetSlot.SetCar(null);
+            
             var sequence = DOTween.Sequence();
             sequence.Append(transform.DOLocalMove(oldPosition, Config.TIME_CAR_MOVE_BACK)
                 .SetEase(Ease.OutBack)
@@ -106,43 +114,50 @@ public class CarController : MonoBehaviour
                     _state = CarState.PARKING;
                 }));
         }
-
-
-    }
-
-    private Vector3[] GetArcPath(Vector3 start, Vector3 end)
-    {
-        float minX = -4f;  // vùng cấm bên trái
-        float maxX = 4f;
-        Vector3 midPoint = (start + end) / 2f;
-
-        if (midPoint.x > minX && midPoint.x < maxX)
-        {
-            // chọn đẩy ra bên trái hoặc bên phải
-            if (midPoint.x - minX < maxX - midPoint.x)
-                midPoint.x = minX - 0.5f; // lùi ra ngoài trái
-            else
-                midPoint.x = maxX + 0.5f; // ra ngoài phải
-        }
-        return new Vector3[] { start, midPoint, end };
     }
     public void Crash()
     {
     }
     public void Leave()
     {
+        if (_state == CarState.LEAVE) return;
         // Xe di chuyen rời đi -------------
         _state = CarState.LEAVE;
-        Destroy(gameObject);
+
+
+        StartCoroutine(ILeave());
 
     }
-    public void AddPassenger()
+    private IEnumerator ILeave()
     {
+        yield return new WaitForSeconds(Config.TIME_PASSENGER_TO_CAR);
+        Sequence sequence = DOTween.Sequence();
+
+        Vector3[] pathPositions = new Vector3[2];
+
+        var point1 = new Vector3(transform.position.x, 0, ParkingPlotCtrl.Instance.GetZTop());
+        var point2 = point1 + Vector3.right * 30;
+        pathPositions[0] = point1;
+        pathPositions[1] = point2;
+
+        transform.DOPath(pathPositions, Config.VEC_CAR_MOVE, PathType.CatmullRom).SetSpeedBased().OnComplete(() =>
+        {
+            Destroy(gameObject);
+        }).SetLookAt(0.01f);
+    }
+
+    public void AddPassenger(Passenger passenger)
+    {
+        passengerToCards.Add(passenger);
         currentPassengerNum += 1;
     }
     public bool IsFull()
     {
         return currentPassengerNum == (int)_data.Size;
+    }
+    public Transform GetCarSeat()
+    {
+        return _seat.GetSeat(currentPassengerNum - 1);
     }
 }
 public enum CarState

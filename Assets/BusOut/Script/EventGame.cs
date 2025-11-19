@@ -14,5 +14,6 @@ public static class EventGame
     {
         public static Action OnSlotUpdate;
         public static Action OnQueuePassenger;
+        public static Action<int> OnUpdateNumberPassenger;
     }
 }

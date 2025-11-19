@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LevelCtrl : MonoSingleton<LevelCtrl>
@@ -35,45 +36,33 @@ public class LevelCtrl : MonoSingleton<LevelCtrl>
     public void OnSelectCar(GameObject SelectedCar)
     {
         if (SelectedCar == null) return;
+        if (slotCtrl.IsFullReady())
+        {
+            Debug.Log("Lose Game");
+            return;
+        }
         var car = SelectedCar.GetComponent<CarController>();
 
         if (car.State == CarState.PARKING && SlotCtrl.Instance.CheckEmptySlot())
         {
             var target = SlotCtrl.Instance.GetFirstEmptySlot();
             target.SetCar(car);
+            target.SetState(SlotState.WaitCar);
             car.SetMove(target);
         }
     }
     public void OnSlotUpdate()
     {
-        var slots = SlotCtrl.Instance.slots;
-        foreach (var slot in slots)
-        {
-            if (slot.CheckEmpty())
-            {
-                continue;
-            }
-            if (slot.currentCarController.IsFull())
-            {
-                slot.currentCarController.Leave();
-                slot.SetCar(null);
-                continue;
-            }
-            var passenger = QueuePassengerCtrl.Instance.GetFrontPassenger();
-            if (passenger != null && slot.CanPassengerGo(passenger))
-            {
-                slot.currentCarController.AddPassenger();
-                QueuePassengerCtrl.Instance.MoveToCar(passenger, slot.currentCarController);
-                if (slot.currentCarController.IsFull())
-                {
-                    slot.currentCarController.Leave();
-                    slot.SetCar(null);
-                }
-            }
-        }
+        TryPassengerGo();
     }
     public void OnQueuePassenger()
     {
+        TryPassengerGo();
+    }
+    public void TryPassengerGo()
+    {
+        if (!QueuePassengerCtrl.Instance.IsReady()) return;
+
         var slots = SlotCtrl.Instance.slots;
         foreach (var slot in slots)
         {
@@ -90,14 +79,20 @@ public class LevelCtrl : MonoSingleton<LevelCtrl>
             var passenger = QueuePassengerCtrl.Instance.GetFrontPassenger();
             if (passenger != null && slot.CanPassengerGo(passenger))
             {
-                slot.currentCarController.AddPassenger();
+                slot.currentCarController.AddPassenger(passenger);
                 QueuePassengerCtrl.Instance.MoveToCar(passenger, slot.currentCarController);
                 if (slot.currentCarController.IsFull())
                 {
                     slot.currentCarController.Leave();
                     slot.SetCar(null);
+                    slot.SetStateDefault();
                 }
+                return;
             }
+        }
+        if (slotCtrl.IsFullReady())
+        {
+            Debug.Log("Lose");
         }
     }
 }

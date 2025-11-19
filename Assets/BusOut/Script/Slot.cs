@@ -4,11 +4,21 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-   public CarController currentCarController;
+    public CarController currentCarController;
 
+    [SerializeField] private SlotState _state;
+    private SlotState _stateDefault;
     public void Init()
     {
-
+        _stateDefault = _state;
+    }
+    public void SetState(SlotState state)
+    {
+        _state = state;
+    }
+    public void SetStateDefault()
+    {
+        _state = _stateDefault;
     }
     public void SetCar(CarController car)
     {
@@ -19,13 +29,13 @@ public class Slot : MonoBehaviour
     {
         return currentCarController == null;
     }
-    public bool IsReady()
+    public bool IsStateNone()
     {
-        return true;
-        // return _state == SlotState.READY;
+        return _state == SlotState.None;
     }
     public void READY()
     {
+        _state = SlotState.READY;
         EventGame.Game.OnSlotUpdate.Invoke();
     }
     public bool CanPassengerGo(Passenger passenger)
@@ -35,6 +45,8 @@ public class Slot : MonoBehaviour
 }
 public enum SlotState
 {
+    None,
+    WaitCar,
     READY,
     LOCK,
     VIP

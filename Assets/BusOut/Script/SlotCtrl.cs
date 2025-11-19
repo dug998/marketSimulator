@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SlotCtrl : MonoSingleton<SlotCtrl>
@@ -9,6 +10,10 @@ public class SlotCtrl : MonoSingleton<SlotCtrl>
     public void Init()
     {
         slots.ForEach(x => x.Init());
+    }
+    public bool IsFullReady()
+    {
+        return slots.All(x => !x.CheckEmpty());
     }
     public bool CheckEmptySlot()
     {
@@ -25,7 +30,7 @@ public class SlotCtrl : MonoSingleton<SlotCtrl>
     {
         foreach (var slot in slots)
         {
-            if (slot.CheckEmpty() == true && slot.IsReady())
+            if (slot.CheckEmpty() == true && slot.IsStateNone())
             {
                 return slot;
             }
