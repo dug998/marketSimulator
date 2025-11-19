@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class LevelSetup : MonoSingleton<LevelSetup>
+namespace Bus
 {
-    public List<Material> materials;
-    public Material GetMaterialByIdColor(int id)
+    public class LevelSetup : MonoSingleton<LevelSetup>
     {
-        return materials[id % materials.Count];
-    }
+        public List<Material> materials;
+        public Material GetMaterialByIdColor(int id)
+        {
+            return materials[id % materials.Count];
+        }
 
+    }
 }

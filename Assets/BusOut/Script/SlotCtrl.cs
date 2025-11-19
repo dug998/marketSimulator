@@ -2,42 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
-public class SlotCtrl : MonoSingleton<SlotCtrl>
+namespace Bus
 {
-    public List<Slot> slots;
+    public class SlotCtrl : MonoSingleton<SlotCtrl>
+    {
+        public List<Slot> slots;
 
-    public void Init()
-    {
-        slots.ForEach(x => x.Init());
-    }
-    public bool IsFullReady()
-    {
-        return slots.All(x => !x.CheckEmpty());
-    }
-    public bool CheckEmptySlot()
-    {
-        foreach (var slot in slots)
+        public void Init()
         {
-            if (slot.CheckEmpty())
-            {
-                return true;
-            }
+            slots.ForEach(x => x.Init());
         }
-        return false;
-    }
-    public Slot GetFirstEmptySlot()
-    {
-        foreach (var slot in slots)
+        public bool IsFullReady()
         {
-            if (slot.CheckEmpty() == true && slot.IsStateNone())
-            {
-                return slot;
-            }
+            return slots.All(x => !x.CheckEmpty());
         }
-        Debug.LogWarning("SlotManager: don't have EmptySlot");
-        return null;
-    }
-  
+        public bool CheckEmptySlot()
+        {
+            foreach (var slot in slots)
+            {
+                if (slot.CheckEmpty())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public Slot GetFirstEmptySlot()
+        {
+            foreach (var slot in slots)
+            {
+                if (slot.CheckEmpty() == true && slot.IsStateNone())
+                {
+                    return slot;
+                }
+            }
+            Debug.LogWarning("SlotManager: don't have EmptySlot");
+            return null;
+        }
 
+
+    }
 }

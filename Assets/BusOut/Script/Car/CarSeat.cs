@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class CarSeat : MonoBehaviour
+namespace Bus
 {
-    public List<Transform> _seats = new List<Transform>();
-    public Transform GetSeat(int index)
+    public class CarSeat : MonoBehaviour
     {
-        return _seats[index % _seats.Count];
+        public List<Transform> _seats = new List<Transform>();
+        public Transform GetSeat(int index)
+        {
+            return _seats[index % _seats.Count];
+        }
     }
 }

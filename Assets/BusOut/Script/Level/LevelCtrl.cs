@@ -2,97 +2,99 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
-public class LevelCtrl : MonoSingleton<LevelCtrl>
+namespace Bus
 {
-    public SlotCtrl slotCtrl;
-    public QueuePassengerCtrl queuePassengerCtrl;
-    public ParkingPlotCtrl parkingPlotCtrl;
-    [ContextMenu("Init Level")]
-    private void Start()
+    public class LevelCtrl : MonoSingleton<LevelCtrl>
     {
-        Init();
-    }
-    public void Init()
-    {
-        int level = 0;
-        var levelData = LevelLoader.Instance.LoadLevel(level);
-        slotCtrl.Init();
-        queuePassengerCtrl.Init(levelData.QueuePassengerData);
-        parkingPlotCtrl.Init(levelData.ParkingPlotData);
-    }
-
-    private void OnEnable()
-    {
-        EventGame.Car.OnSelectCar += OnSelectCar;
-        EventGame.Game.OnSlotUpdate += OnSlotUpdate;
-        EventGame.Game.OnQueuePassenger += OnQueuePassenger;
-    }
-    private void OnDisable()
-    {
-
-
-    }
-    public void OnSelectCar(GameObject SelectedCar)
-    {
-        if (SelectedCar == null) return;
-        if (slotCtrl.IsFullReady())
+        public SlotCtrl slotCtrl;
+        public QueuePassengerCtrl queuePassengerCtrl;
+        public ParkingPlotCtrl parkingPlotCtrl;
+        [ContextMenu("Init Level")]
+        private void Start()
         {
-            Debug.Log("Lose Game");
-            return;
+            Init();
         }
-        var car = SelectedCar.GetComponent<CarController>();
-
-        if (car.State == CarState.PARKING && SlotCtrl.Instance.CheckEmptySlot())
+        public void Init()
         {
-            var target = SlotCtrl.Instance.GetFirstEmptySlot();
-            target.SetCar(car);
-            target.SetState(SlotState.WaitCar);
-            car.SetMove(target);
+            int level = 0;
+            var levelData = LevelLoader.Instance.LoadLevel(level);
+            slotCtrl.Init();
+            queuePassengerCtrl.Init(levelData.QueuePassengerData);
+            parkingPlotCtrl.Init(levelData.ParkingPlotData);
         }
-    }
-    public void OnSlotUpdate()
-    {
-        TryPassengerGo();
-    }
-    public void OnQueuePassenger()
-    {
-        TryPassengerGo();
-    }
-    public void TryPassengerGo()
-    {
-        if (!QueuePassengerCtrl.Instance.IsReady()) return;
 
-        var slots = SlotCtrl.Instance.slots;
-        foreach (var slot in slots)
+        private void OnEnable()
         {
-            if (slot.CheckEmpty())
+            EventGame.Car.OnSelectCar += OnSelectCar;
+            EventGame.Game.OnSlotUpdate += OnSlotUpdate;
+            EventGame.Game.OnQueuePassenger += OnQueuePassenger;
+        }
+        private void OnDisable()
+        {
+
+
+        }
+        public void OnSelectCar(GameObject SelectedCar)
+        {
+            if (SelectedCar == null) return;
+            if (slotCtrl.IsFullReady())
             {
-                continue;
+                Debug.Log("Lose Game");
+                return;
             }
-            if (slot.currentCarController.IsFull())
+            var car = SelectedCar.GetComponent<CarController>();
+
+            if (car.State == CarState.PARKING && SlotCtrl.Instance.CheckEmptySlot())
             {
-                slot.currentCarController.Leave();
-                slot.SetCar(null);
-                continue;
+                var target = SlotCtrl.Instance.GetFirstEmptySlot();
+                target.SetCar(car);
+                target.SetState(SlotState.WaitCar);
+                car.SetMove(target);
             }
-            var passenger = QueuePassengerCtrl.Instance.GetFrontPassenger();
-            if (passenger != null && slot.CanPassengerGo(passenger))
+        }
+        public void OnSlotUpdate()
+        {
+            TryPassengerGo();
+        }
+        public void OnQueuePassenger()
+        {
+            TryPassengerGo();
+        }
+        public void TryPassengerGo()
+        {
+            if (!QueuePassengerCtrl.Instance.IsReady()) return;
+
+            var slots = SlotCtrl.Instance.slots;
+            foreach (var slot in slots)
             {
-                slot.currentCarController.AddPassenger(passenger);
-                QueuePassengerCtrl.Instance.MoveToCar(passenger, slot.currentCarController);
+                if (slot.CheckEmpty())
+                {
+                    continue;
+                }
                 if (slot.currentCarController.IsFull())
                 {
                     slot.currentCarController.Leave();
                     slot.SetCar(null);
-                    slot.SetStateDefault();
+                    continue;
                 }
-                return;
+                var passenger = QueuePassengerCtrl.Instance.GetFrontPassenger();
+                if (passenger != null && slot.CanPassengerGo(passenger))
+                {
+                    slot.currentCarController.AddPassenger(passenger);
+                    QueuePassengerCtrl.Instance.MoveToCar(passenger, slot.currentCarController);
+                    if (slot.currentCarController.IsFull())
+                    {
+                        slot.currentCarController.Leave();
+                        slot.SetCar(null);
+                        slot.SetStateDefault();
+                    }
+                    return;
+                }
             }
-        }
-        if (slotCtrl.IsFullReady())
-        {
-            Debug.Log("Lose");
+            if (slotCtrl.IsFullReady())
+            {
+                Debug.Log("Lose");
+            }
         }
     }
 }

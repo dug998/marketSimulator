@@ -2,18 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public static class EventGame
+namespace Bus
 {
-    public static class Car
+    public static class EventGame
     {
-        public static Action<GameObject> OnSelectCar;
+        public static class Car
+        {
+            public static Action<GameObject> OnSelectCar;
 
-    }
-    public static class Game
-    {
-        public static Action OnSlotUpdate;
-        public static Action OnQueuePassenger;
-        public static Action<int> OnUpdateNumberPassenger;
+        }
+        public static class Game
+        {
+            public static Action OnSlotUpdate;
+            public static Action OnQueuePassenger;
+            public static Action<int> OnUpdateNumberPassenger;
+        }
     }
 }
