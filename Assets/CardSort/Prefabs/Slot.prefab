@@ -150,3 +150,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65ea394e501bdcf4a8b4e98bbde41bd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CardLst: []
+  _topCardColor: 5
