@@ -13,3 +13,8 @@ public enum SlotStatus
     Passive,
     Locked
 }
+public enum GameState
+{
+    None,
+    Play
+}

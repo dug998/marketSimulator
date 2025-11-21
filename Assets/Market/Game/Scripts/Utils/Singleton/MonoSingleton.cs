@@ -20,4 +20,10 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
             return _Instance;
         }
     }
+    private void OnDestroy()
+    {
+        _Instance = null;
+
+
+    }
 }

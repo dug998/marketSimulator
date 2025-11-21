@@ -152,3 +152,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardLst: []
   _topCardColor: 5
+  currentStatu: 0
+  IsDealTable: 0
+  _collider: {fileID: 7307592538364759236}
